@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin — VNF Mahila Adhiveshan 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#7B1F2E,#C8792A);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .card{background:white;border-radius:16px;padding:40px 36px;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);margin:20px}
+    .lock{font-size:48px;text-align:center;margin-bottom:16px}
+    h1{font-size:22px;text-align:center;color:#7B1F2E;margin-bottom:6px}
+    .sub{text-align:center;color:#999;font-size:13px;margin-bottom:28px}
+    label{display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:8px}
+    input[type=password]{width:100%;border:2px solid #DDD;border-radius:8px;padding:12px 14px;font-size:15px;outline:none;font-family:'Poppins',sans-serif;transition:border-color 0.2s}
+    input[type=password]:focus{border-color:#7B1F2E}
+    .error-msg{background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2;border-left:4px solid #C62828;border-radius:8px;padding:10px 14px;font-size:13px;margin-top:14px;display:none}
+    .btn{width:100%;margin-top:20px;background:linear-gradient(135deg,#7B1F2E,#9B2D3C);color:white;border:none;border-radius:8px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;transition:transform 0.15s;box-shadow:0 4px 14px rgba(123,31,46,0.3)}
+    .btn:hover{transform:translateY(-2px)}
+    .back{display:block;text-align:center;margin-top:16px;font-size:13px;color:#999;text-decoration:none}
+    .back:hover{color:#7B1F2E}
+    #sheet-link-section{display:none;text-align:center}
+    .open-sheet-btn{display:inline-flex;align-items:center;gap:10px;background:#0F9D58;color:white;border:none;border-radius:10px;padding:16px 28px;font-size:16px;font-weight:700;cursor:pointer;text-decoration:none;font-family:'Poppins',sans-serif;margin-top:12px;transition:transform 0.15s;box-shadow:0 4px 14px rgba(15,157,88,0.3)}
+    .open-sheet-btn:hover{transform:translateY(-2px)}
+    .note{font-size:12px;color:#999;margin-top:16px;line-height:1.6}
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="lock">🔐</div>
+  <h1>Admin Panel</h1>
+  <p class="sub">VNF Mahila Adhiveshan 2026</p>
+
+  <div id="login-section">
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter admin password" autofocus/>
+    <div class="error-msg" id="error-msg">⚠️ Incorrect password. Try again.</div>
+    <button class="btn" onclick="doLogin()">🔓 Login</button>
+  </div>
+
+  <div id="sheet-link-section">
+    <p style="font-size:15px;font-weight:600;color:#333;margin-bottom:8px">✅ Logged in! Click below to view all registrations:</p>
+    <a id="sheet-btn" class="open-sheet-btn" href="#" target="_blank">
+      📊 Open Google Sheet
+    </a>
+    <p class="note">
+      All registrations are stored in your Google Sheet.<br/>
+      You can search, filter, sort, and download from there.<br/><br/>
+      <a href="index.html" style="color:#7B1F2E">← Back to Registration Form</a>
+    </p>
+  </div>
+
+  <a href="index.html" class="back" id="back-link">← Back to Registration Form</a>
+</div>
+
+<script src="static/config.js"></script>
+<script>
+  document.getElementById('password').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doLogin() {
+    const pwd = document.getElementById('password').value;
+    const err = document.getElementById('error-msg');
+    if (pwd === CONFIG.ADMIN_PASSWORD) {
+      document.getElementById('login-section').style.display = 'none';
+      document.getElementById('back-link').style.display = 'none';
+      document.getElementById('sheet-btn').href = CONFIG.SHEET_URL;
+      document.getElementById('sheet-link-section').style.display = 'block';
+    } else {
+      err.style.display = 'block';
+      document.getElementById('password').value = '';
+      document.getElementById('password').focus();
+    }
+  }
+</script>
+</body>
+</html>
