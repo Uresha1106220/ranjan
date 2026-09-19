@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>મહિલા અધિવેશન ૨૦૨૬ — રજિસ્ટ્રેશન</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary:   #7B1F2E;
+      --secondary: #C8792A;
+      --accent:    #F5A623;
+      --gold:      #D4AF37;
+      --bg:        #F3EFE8;
+      --card:      #FFFFFF;
+      --text:      #2D2D2D;
+      --muted:     #6B6B6B;
+      --success:   #2E7D32;
+      --error:     #C62828;
+      --border:    #DDD5C8;
+      --radius:    12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', 'Noto Sans Gujarati', sans-serif;
+      background: linear-gradient(135deg, #f8f3ec 0%, #ede4d3 100%);
+      min-height: 100vh;
+      color: var(--text);
+    }
+
+    /* ── Top Banner ── */
+    .top-banner {
+      background: linear-gradient(135deg, var(--primary) 0%, #5a1520 100%);
+      color: white;
+      text-align: center;
+      padding: 6px 12px;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, #8B2535 100%);
+      color: white;
+      padding: 28px 20px 22px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .header-logo { font-size: 38px; margin-bottom: 4px; }
+    .header h1 {
+      font-size: clamp(20px, 5vw, 30px);
+      font-weight: 700;
+      font-family: 'Noto Sans Gujarati', sans-serif;
+      text-shadow: 1px 2px 8px rgba(0,0,0,0.3);
+      letter-spacing: 1px;
+    }
+    .header-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 6px;
+      font-family: 'Noto Sans Gujarati', sans-serif;
+    }
+    .header-org {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 12px;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Event Info Strip ── */
+    .event-strip {
+      background: linear-gradient(90deg, var(--secondary), var(--accent), var(--secondary));
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .event-strip .item {
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .event-strip .item span { font-size: 16px; }
+
+    /* ── Main Container ── */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    /* ── Organizer Badge ── */
+    .organizer-badge {
+      background: white;
+      border-left: 4px solid var(--gold);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 12px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .organizer-badge .icon { font-size: 24px; }
+    .organizer-badge .text { font-size: 13px; color: var(--muted); }
+    .organizer-badge .name { font-weight: 700; color: var(--primary); font-size: 15px; }
+
+    /* ── Error box ── */
+    .error-box {
+      background: #FFEBEE;
+      border: 1px solid #FFCDD2;
+      border-left: 4px solid var(--error);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+    }
+    .error-box p { color: var(--error); font-size: 13px; margin: 2px 0; }
+
+    /* ── Form Card ── */
+    .form-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px 28px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s;
+    }
+    .form-card:focus-within { box-shadow: 0 4px 24px rgba(123,31,46,0.12); }
+
+    .field-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      font-family: 'Noto Sans Gujarati', 'Poppins', sans-serif;
+    }
+    .field-label .required { color: var(--error); margin-left: 3px; }
+    .field-label .gu { color: var(--muted); font-weight: 400; font-size: 13px; margin-left: 5px; }
+
+    .field-input {
+      width: 100%;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      background: #FAFAF8;
+    }
+    .field-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123,31,46,0.1);
+      background: white;
+    }
+    .field-input::placeholder { color: #BBB; }
+
+    .field-hint {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── Radio & Checkbox ── */
+    .options-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .option-item:hover { border-color: var(--secondary); background: #FFF8F0; }
+    .option-item input[type=radio],
+    .option-item input[type=checkbox] {
+      width: 18px; height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .option-item.selected { border-color: var(--primary); background: #FDF0F2; }
+    .option-label { font-size: 14px; font-weight: 500; }
+    .option-sub { font-size: 12px; color: var(--muted); font-family: 'Noto Sans Gujarati', sans-serif; }
+
+    /* ── QR Section ── */
+    .qr-section {
+      background: linear-gradient(135deg, #FFF8EC, #FFF3E0);
+      border: 2px dashed var(--accent);
+      border-radius: var(--radius);
+      padding: 22px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .qr-section h3 {
+      font-size: 15px; font-weight: 700;
+      color: var(--primary); margin-bottom: 4px;
+    }
+    .qr-section .amount {
+      font-size: 28px; font-weight: 700;
+      color: var(--secondary);
+    }
+    .upi-id {
+      background: white;
+      border: 1px solid #DDD;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      display: inline-block;
+      margin: 6px 0;
+      letter-spacing: 0.5px;
+    }
+    .qr-note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    /* ── Info Note ── */
+    .info-note {
+      background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
+      border: 1px solid #C8E6C9;
+      border-left: 4px solid var(--success);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      font-size: 13px;
+      font-family: 'Noto Sans Gujarati', 'Poppins', sans-serif;
+      color: #2E7D32;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    /* ── Transaction field (hidden by default) ── */
+    #transaction-section { display: none; }
+
+    /* ── Submit Button ── */
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, #9B2D3C 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 14px rgba(123,31,46,0.3);
+      font-family: 'Noto Sans Gujarati', 'Poppins', sans-serif;
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(123,31,46,0.4);
+    }
+    .submit-btn:active { transform: translateY(0); }
+
+    /* ── Required note ── */
+    .required-note { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+    .required-note .star { color: var(--error); }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--primary);
+      color: rgba(255,255,255,0.7);
+      margin-top: 0;
+    }
+
+    /* ── Upload Area ── */
+    .upload-area {
+      display: block;
+      border: 2px dashed var(--secondary);
+      border-radius: 10px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: #FFF8F0;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .upload-area:hover, .upload-area.drag-over {
+      border-color: var(--primary);
+      background: #FDF0F2;
+    }
+    .upload-icon { font-size: 34px; margin-bottom: 6px; }
+    .upload-text { font-size: 14px; font-weight: 600; color: var(--primary); }
+    .upload-sub  { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    @media (max-width: 520px) {
+      .form-card { padding: 18px 16px; }
+      .event-strip { gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-banner">🙏 શ્રી વિશ્વકર્મા નિર્માણ ફાઉન્ડેશન (VNF) — ધર્મ · સંસ્કૃતિ · સંસ્કાર · પરંપરા 🙏</div>
+
+<div class="header">
+  <div class="header-logo">🏛️</div>
+  <h1>મહિલા અધિવેશન ૨૦૨૬</h1>
+  <p class="header-subtitle">પ્રથમ ઐતિહાસિક મહિલા અધિવેશન — રજિસ્ટ્રેશન ફોર્મ</p>
+  <span class="header-org">શ્રી વિશ્વકર્મા નિર્માણ ફાઉન્ડેશન</span>
+</div>
+
+<div class="event-strip">
+  <div class="item"><span>📅</span> 22/11/2026, શનિવાર</div>
+  <div class="item"><span>📍</span> અમદાવાદ</div>
+  <div class="item"><span>🕙</span> 10:30 થી 5:30</div>
+  <div class="item"><span>🎁</span> લકી ફ્રી ૧૦૮ ભેટ ઇનામો</div>
+</div>
+
+<div class="container">
+
+  <div class="organizer-badge">
+    <div class="icon">👤</div>
+    <div>
+      <div class="text">ફોર્મ આયોજક / Form Organizer</div>
+      <div class="name">Ranjan Panchal</div>
+    </div>
+  </div>
+
+  {% if errors %}
+  <div class="error-box">
+    {% for e in errors %}
+    <p>⚠️ {{ e }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <p class="required-note"><span class="star">*</span> Indicates required question</p>
+
+  <form method="POST" action="/" id="regForm" novalidate enctype="multipart/form-data">
+
+    <!-- Name -->
+    <div class="form-card">
+      <label class="field-label" for="name">Name <span class="gu">(નામ)</span><span class="required">*</span></label>
+      <input class="field-input" type="text" id="name" name="name" placeholder="Your full name"
+             value="{{ form_data.get('name','') }}" required autocomplete="name"/>
+    </div>
+
+    <!-- Mobile -->
+    <div class="form-card">
+      <label class="field-label" for="mobile">Mobile No<span class="required">*</span></label>
+      <input class="field-input" type="tel" id="mobile" name="mobile" placeholder="10-digit mobile number"
+             value="{{ form_data.get('mobile','') }}" maxlength="10" inputmode="numeric" pattern="[0-9]{10}" required/>
+      <p class="field-hint">📱 10-digit number without country code</p>
+    </div>
+
+    <!-- City -->
+    <div class="form-card">
+      <label class="field-label" for="city">City / Village <span class="gu">(શહેર / ગામ)</span><span class="required">*</span></label>
+      <input class="field-input" type="text" id="city" name="city" placeholder="Your city or village name"
+             value="{{ form_data.get('city','') }}" required autocomplete="address-level2"/>
+    </div>
+
+    <!-- Payment -->
+    <div class="form-card">
+      <label class="field-label">Payment <span class="gu">(100 ₹)</span><span class="required">*</span></label>
+      <div class="options-list">
+        <label class="option-item {% if form_data.get('payment')=='Yes' %}selected{% endif %}">
+          <input type="radio" name="payment" value="Yes" {% if form_data.get('payment')=='Yes' %}checked{% endif %} required/>
+          <div>
+            <div class="option-label">✅ Yes <span style="color:var(--muted);font-size:12px;">(હા)</span></div>
+            <div class="option-sub">100 ₹ ચૂકવ્યા છે</div>
+          </div>
+        </label>
+        <label class="option-item {% if form_data.get('payment')=='No' %}selected{% endif %}">
+          <input type="radio" name="payment" value="No" {% if form_data.get('payment')=='No' %}checked{% endif %}/>
+          <div>
+            <div class="option-label">❌ No <span style="color:var(--muted);font-size:12px;">(ના)</span></div>
+            <div class="option-sub">ચૂકવ્યા નથી</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- QR Code Section -->
+    <div class="qr-section">
+      <h3>💳 ઓનલાઈન પેમેન્ટ / Online Payment</h3>
+      <div class="amount">₹ 100</div>
+      <img src="/static/qr.png" alt="UPI QR Code — Ranjan Bharat Panchal"
+           style="width:200px;height:200px;object-fit:contain;border-radius:12px;margin:14px auto;display:block;border:3px solid #7B1F2E;background:white;padding:6px;box-shadow:0 4px 16px rgba(0,0,0,0.12);"/>
+      <div class="upi-id">UPI ID: ranjanbharatpanchal368-1@oksbi</div>
+      <p style="font-weight:700;color:#7B1F2E;margin:6px 0 2px;font-size:14px;">Ranjan Bharat Panchal</p>
+      <p class="qr-note">📲 Scan to pay with any UPI app (Google Pay, PhonePe, Paytm)</p>
+    </div>
+
+    <!-- Payment Method -->
+    <div class="form-card">
+      <label class="field-label">Payment Method<span class="required">*</span></label>
+      <div class="options-list" id="payMethodList">
+        <label class="option-item {% if 'Online' in (form_data.get('pay_method') or []) %}selected{% endif %}">
+          <input type="checkbox" name="pay_method" value="Online" id="chk_online"
+                 {% if 'Online' in (form_data.get('pay_method') or []) %}checked{% endif %}/>
+          <div>
+            <div class="option-label">🌐 Online</div>
+            <div class="option-sub">UPI / Net Banking</div>
+          </div>
+        </label>
+        <label class="option-item {% if 'Offline' in (form_data.get('pay_method') or []) %}selected{% endif %}">
+          <input type="checkbox" name="pay_method" value="Offline" id="chk_offline"
+                 {% if 'Offline' in (form_data.get('pay_method') or []) %}checked{% endif %}/>
+          <div>
+            <div class="option-label">💵 Offline</div>
+            <div class="option-sub">રોકડ / Cash</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Info Note -->
+    <div class="info-note">
+      🙏 જે બહેનો online payment free ₹100 જમા કરાવેલ છે તેમને અધિવેશન ના દિવસ એ પ્રત કરવા માં આવશે. 🙏<br/>
+      <strong style="display:block;margin-top:8px;text-align:center;">🙏 જ઼રૂર પધારશો 🙏</strong>
+    </div>
+
+    <!-- Transaction ID + Screenshot (shown only when Online selected) -->
+    <div class="form-card" id="transaction-section">
+      <!-- Transaction ID -->
+      <label class="field-label" for="transaction_id">
+        Transaction ID<span class="required">*</span>
+        <span class="gu">(Online payment માટે ફ઼ર઼જ઼ ✅)</span>
+      </label>
+      <input class="field-input" type="text" id="transaction_id" name="transaction_id"
+             placeholder="Enter UPI / Bank transaction ID"
+             value="{{ form_data.get('transaction_id','') }}"/>
+      <p class="field-hint">💡 Payment app → Transaction history → Copy ID</p>
+
+      <!-- Screenshot Upload -->
+      <div style="margin-top:20px;">
+        <label class="field-label" for="screenshot">
+          Payment Screenshot<span class="required">*</span>
+          <span class="gu">(પેમેન્ટ સ્ક્રીનશોટ)</span>
+        </label>
+
+        <label for="screenshot" class="upload-area" id="uploadArea">
+          <div class="upload-icon">📸</div>
+          <div class="upload-text">Click or drag &amp; drop your payment screenshot</div>
+          <div class="upload-sub">JPG, PNG, PDF — Max 5 MB</div>
+          <input type="file" id="screenshot" name="screenshot"
+                 accept="image/*,.pdf" style="display:none"/>
+        </label>
+
+        <!-- Preview -->
+        <div id="previewWrap" style="display:none;margin-top:12px;text-align:center;">
+          <img id="previewImg" src="" alt="Preview"
+               style="max-width:100%;max-height:200px;border-radius:10px;border:2px solid #7B1F2E;box-shadow:0 3px 12px rgba(0,0,0,0.15);"/>
+          <p id="previewName" style="font-size:12px;color:#666;margin-top:6px;"></p>
+          <button type="button" id="removeFile"
+                  style="margin-top:6px;background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2;
+                         border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer;">
+            ✕ Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">
+      🎉 Submit Registration — રજિસ્ટ્રેશન કરો
+    </button>
+
+  </form>
+</div>
+
+<div class="footer">
+  <p>📞 રજિસ્ટ્રેશન માટે સંપર્ક: <strong>Ranjan Panchal</strong></p>
+  <p style="margin-top:6px;">🏛️ શ્રી વિશ્વકર્મા નિર્માણ ફાઉન્ડેશન · Mahila Adhiveshan 2026</p>
+</div>
+
+<script>
+  // ── All DOM refs declared first ─────────────────────────────────────────────
+  const screenshotInput = document.getElementById('screenshot');
+  const previewWrap     = document.getElementById('previewWrap');
+  const previewImg      = document.getElementById('previewImg');
+  const previewName     = document.getElementById('previewName');
+  const uploadArea      = document.getElementById('uploadArea');
+  const removeBtn       = document.getElementById('removeFile');
+
+  // ── Screenshot preview helpers ──────────────────────────────────────────────
+  function showPreview(file) {
+    if (!file || !uploadArea) return;
+    previewName.textContent = '📎 ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => { previewImg.src = e.target.result; previewImg.style.display = 'block'; };
+      reader.readAsDataURL(file);
+    } else {
+      previewImg.style.display = 'none';
+    }
+    previewWrap.style.display = 'block';
+    uploadArea.style.borderColor = '#2E7D32';
+    uploadArea.style.background  = '#E8F5E9';
+    uploadArea.querySelector('.upload-icon').textContent = '✅';
+    uploadArea.querySelector('.upload-text').textContent = 'Screenshot selected!';
+  }
+
+  function clearPreview() {
+    if (!uploadArea) return;
+    if (previewWrap) previewWrap.style.display = 'none';
+    if (previewImg)  { previewImg.src = ''; previewImg.style.display = 'block'; }
+    if (previewName) previewName.textContent = '';
+    uploadArea.style.borderColor = '';
+    uploadArea.style.background  = '';
+    uploadArea.querySelector('.upload-icon').textContent = '📸';
+    uploadArea.querySelector('.upload-text').textContent = 'Click or drag & drop your payment screenshot';
+  }
+
+  // Screenshot file change
+  if (screenshotInput) {
+    screenshotInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) showPreview(this.files[0]);
+      else clearPreview();
+    });
+  }
+
+  // Remove button
+  if (removeBtn) {
+    removeBtn.addEventListener('click', function() {
+      if (screenshotInput) screenshotInput.value = '';
+      clearPreview();
+    });
+  }
+
+  // Drag and drop
+  if (uploadArea) {
+    uploadArea.addEventListener('dragover',  e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
+    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+    uploadArea.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && screenshotInput) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        screenshotInput.files = dt.files;
+        showPreview(file);
+      }
+    });
+  }
+
+  // ── Show/hide Transaction + Screenshot section ──────────────────────────────
+  function showHideTransaction() {
+    const online = document.getElementById('chk_online');
+    const sec    = document.getElementById('transaction-section');
+    const tid    = document.getElementById('transaction_id');
+    if (!online || !sec) return;
+    if (online.checked) {
+      sec.style.display = 'block';
+      if (tid) tid.required = true;
+      if (screenshotInput) screenshotInput.required = true;
+    } else {
+      sec.style.display = 'none';
+      if (tid) { tid.required = false; tid.value = ''; }
+      if (screenshotInput) { screenshotInput.required = false; screenshotInput.value = ''; }
+      clearPreview();
+    }
+  }
+
+  // ── Option highlight on select ──────────────────────────────────────────────
+  document.querySelectorAll('.option-item input').forEach(inp => {
+    inp.addEventListener('change', function() {
+      const list = this.closest('.options-list');
+      if (list) {
+        if (this.type === 'radio') {
+          list.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected'));
+        }
+        this.closest('.option-item').classList.toggle('selected', this.checked);
+      }
+      showHideTransaction();
+    });
+  });
+  // init on page load
+  showHideTransaction();
+
+  // ── Mobile: digits only ─────────────────────────────────────────────────────
+  document.getElementById('mobile').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(0, 10);
+  });
+
+  // ── Submit button loading state ─────────────────────────────────────────────
+  document.getElementById('regForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = '⏳ Submitting...';
+    btn.disabled = true;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Environment / secrets
+.env
+.env.local
+.env.production
+
+# Local data (not needed on server — Supabase is used in production)
+admin/screenshots/
+admin/data.csv
+
+# Temp / dev files
+*.zip
+check_form.py
+fix_csv.py
+wsgi.py
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
