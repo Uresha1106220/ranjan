@@ -2,24 +2,24 @@
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
-*.egg-info/
 
-# Environment / secrets
+# Secrets
 .env
 .env.local
-.env.production
 
-# Local data (not needed on server — Supabase is used in production)
-admin/screenshots/
+# Local data (Supabase is used in production)
 admin/data.csv
+admin/screenshots/
 
 # Temp / dev files
 *.zip
 check_form.py
 fix_csv.py
 wsgi.py
-*.log
+apps_script.gs
+index.html
+admin.html
+static/config.js
 
 # OS
 .DS_Store
