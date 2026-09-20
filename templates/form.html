@@ -377,6 +377,36 @@
              value="{{ form_data.get('city','') }}" required autocomplete="address-level2"/>
     </div>
 
+    <!-- ★ Highlighted Info Note ★ -->
+    <div style="
+      background: linear-gradient(135deg, #FFF8E1, #FFF3CD);
+      border: 2px solid #F5A623;
+      border-left: 6px solid #7B1F2E;
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 18px rgba(200, 121, 42, 0.25);
+      font-family: 'Noto Sans Gujarati', 'Poppins', sans-serif;
+      font-size: 15px;
+      line-height: 1.85;
+      color: #3E1A00;
+      position: relative;
+    ">
+      <div style="
+        position: absolute; top: -12px; left: 18px;
+        background: #7B1F2E; color: white;
+        font-size: 11px; font-weight: 700;
+        padding: 3px 12px; border-radius: 20px;
+        letter-spacing: 1px; font-family: 'Poppins', sans-serif;
+      ">📢 IMPORTANT</div>
+      <p style="margin-top: 6px;">
+        🙏 જે બહેનો online payment free ₹100 જમા કરાવેલ છે તેમને અધિવેશન ના દિવસ એ <strong>પ્રત</strong> કરવા માં આવશે. 🙏
+      </p>
+      <p style="text-align:center; margin-top:10px; font-size:17px; font-weight:800; color:#7B1F2E;">
+        🙏 જ઼રૂર પધારશો 🙏
+      </p>
+    </div>
+
     <!-- Payment -->
     <div class="form-card">
       <label class="field-label">Payment <span class="gu">(100 ₹)</span><span class="required">*</span></label>
@@ -432,11 +462,8 @@
       </div>
     </div>
 
-    <!-- Info Note -->
-    <div class="info-note">
-      🙏 જે બહેનો online payment free ₹100 જમા કરાવેલ છે તેમને અધિવેશન ના દિવસ એ પ્રત કરવા માં આવશે. 🙏<br/>
-      <strong style="display:block;margin-top:8px;text-align:center;">🙏 જ઼રૂર પધારશો 🙏</strong>
-    </div>
+
+
 
     <!-- Transaction ID + Screenshot (shown only when Online selected) -->
     <div class="form-card" id="transaction-section">
