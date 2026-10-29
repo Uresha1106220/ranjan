@@ -7,6 +7,7 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, send_file, Response
 from functools import wraps
 from werkzeug.utils import secure_filename
+import requests
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "vnf_mahila_adhiveshan_2026_secret")
@@ -49,61 +50,58 @@ def _sb_headers(content_type="application/json"):
     }
 
 def _sb_get(path, params=""):
-    import urllib.request, urllib.error
-    url = f"{SUPABASE_URL}/rest/v1/{path}?{params}"
-    req = urllib.request.Request(url, headers={
+    url = f"{SUPABASE_URL}/rest/v1/{path}"
+    headers = {
         "apikey":        SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
-    })
+    }
+    if params:
+        url = f"{url}?{params}"
     try:
-        with urllib.request.urlopen(req, timeout=12) as r:
-            return json.loads(r.read().decode())
-    except urllib.error.HTTPError as e:
-        err_msg = e.read().decode("utf-8", errors="ignore")
-        print(f"[Supabase GET error {e.code}] {err_msg}")
-        raise RuntimeError(f"Supabase GET ({e.code}): {err_msg}")
-    except Exception as e:
+        r = requests.get(url, headers=headers, timeout=12)
+        r.raise_for_status()
+        return r.json()
+    except requests.exceptions.RequestException as e:
         print(f"[Supabase GET error] {e}")
         raise
 
 def _sb_post(path, data: dict):
-    import urllib.request, urllib.error
-    url  = f"{SUPABASE_URL}/rest/v1/{path}"
-    body = json.dumps(data).encode("utf-8")
-    req  = urllib.request.Request(url, data=body, headers={
+    url = f"{SUPABASE_URL}/rest/v1/{path}"
+    headers = {
         "apikey":        SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Content-Type":  "application/json",
         "Prefer":        "return=minimal",
-    }, method="POST")
+    }
     try:
-        with urllib.request.urlopen(req, timeout=12) as r:
-            return r.status
-    except urllib.error.HTTPError as e:
-        err_msg = e.read().decode("utf-8", errors="ignore")
-        print(f"[Supabase POST error {e.code}] {err_msg}")
-        raise RuntimeError(f"Database error ({e.code}): {err_msg}")
-    except Exception as e:
-        print(f"[Supabase POST error] {e}")
+        r = requests.post(url, headers=headers, json=data, timeout=12)
+        r.raise_for_status()
+        return r.status_code
+    except requests.exceptions.HTTPError as e:
+        err_msg = e.response.text if e.response is not None else str(e)
+        print(f"[Supabase POST error] {err_msg}")
+        raise RuntimeError(f"Database error ({e.response.status_code if e.response else 'HTTP'}): {err_msg}")
+    except requests.exceptions.RequestException as e:
+        print(f"[Supabase connection error] {e}")
         raise
 
 def _sb_upload(filename, file_bytes, mime):
     """Upload file to Supabase Storage via REST."""
-    import urllib.request
     url = f"{SUPABASE_URL}/storage/v1/object/screenshots/{filename}"
-    req = urllib.request.Request(url, data=file_bytes, headers={
+    headers = {
         "apikey":        SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Content-Type":  mime,
         "x-upsert":      "true",
-    }, method="POST")
+    }
     try:
-        with urllib.request.urlopen(req, timeout=15) as r:
-            pass
-        return f"{SUPABASE_URL}/storage/v1/object/public/screenshots/{filename}"
+        r = requests.post(url, headers=headers, data=file_bytes, timeout=15)
+        if r.status_code in (200, 201):
+            return f"{SUPABASE_URL}/storage/v1/object/public/screenshots/{filename}"
+        print(f"[Screenshot upload status] {r.status_code} {r.text}")
     except Exception as e:
         print(f"[Screenshot upload error] {e}")
-        return ""
+    return ""
 
 # ── Local CSV helpers ─────────────────────────────────────────────────────────
 def ensure_local_files():
@@ -249,10 +247,16 @@ def form():
             db_insert(sr_no, reg_no, name, mobile, city, payment,
                       ", ".join(pay_methods), transaction_id, screenshot_ref, now)
         except Exception as e:
+            err_str = str(e)
             app.logger.error(f"Form submission error: {e}")
-            return render_template("form.html", errors=[
-                f"Error saving registration: {e}"
-            ], form_data={
+            if any(term in err_str for term in ["Device or resource busy", "getaddrinfo", "Failed to resolve", "ConnectionError", "NameResolutionError"]):
+                user_err = "⚠️ Supabase Database is paused due to inactivity. Please go to your Supabase Dashboard and click 'Restore project' (પ્રોજેક્ટ Unpause કરો)."
+            elif "401" in err_str or "403" in err_str or "row-level security" in err_str:
+                user_err = "⚠️ Database permission error. Please run: ALTER TABLE registrations DISABLE ROW LEVEL SECURITY; in Supabase SQL editor."
+            else:
+                user_err = f"⚠️ Error saving registration: {err_str}"
+
+            return render_template("form.html", errors=[user_err], form_data={
                 "name": name, "mobile": mobile, "city": city,
                 "payment": payment, "pay_method": pay_methods,
                 "transaction_id": transaction_id,
