@@ -16,13 +16,21 @@ ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "ranjan123")
 ALLOWED_EXT    = {"png", "jpg", "jpeg", "gif", "webp", "pdf"}
 
 # ── Supabase config ───────────────────────────────────────────────────────────
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "").rstrip("/")
-SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
+DEFAULT_SB_URL = "https://akperxyncqxyjfyqnvxs.supabase.co"
+DEFAULT_SB_KEY = "sb_publishable_qlWssqBhzj_j2Duug2oCfQ_vcGyvj4w"
+
+SUPABASE_URL = (os.environ.get("SUPABASE_URL") or DEFAULT_SB_URL).rstrip("/")
+SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY") or os.environ.get("SUPABASE_KEY") or DEFAULT_SB_KEY
 USE_SUPABASE = bool(SUPABASE_URL and SUPABASE_KEY)
 
-# ── Local file paths (development only) ──────────────────────────────────────
-_base          = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR       = os.path.join(_base, "admin")
+# ── Local file paths (development & fallback) ────────────────────────────────
+is_serverless = bool(os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
+if is_serverless:
+    DATA_DIR = "/tmp/admin"
+else:
+    _base    = os.path.dirname(os.path.abspath(__file__))
+    DATA_DIR = os.path.join(_base, "admin")
+
 DATA_FILE      = os.path.join(DATA_DIR, "data.csv")
 SCREENSHOT_DIR = os.path.join(DATA_DIR, "screenshots")
 CSV_HEADERS    = [
@@ -31,7 +39,7 @@ CSV_HEADERS    = [
     "Screenshot", "Submitted At"
 ]
 
-# ── Supabase REST helpers (no supabase package needed) ────────────────────────
+# ── Supabase REST helpers (no external packages needed) ───────────────────────
 def _sb_headers(content_type="application/json"):
     return {
         "apikey":        SUPABASE_KEY,
@@ -41,27 +49,43 @@ def _sb_headers(content_type="application/json"):
     }
 
 def _sb_get(path, params=""):
-    import urllib.request
+    import urllib.request, urllib.error
     url = f"{SUPABASE_URL}/rest/v1/{path}?{params}"
     req = urllib.request.Request(url, headers={
         "apikey":        SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
     })
-    with urllib.request.urlopen(req) as r:
-        return json.loads(r.read().decode())
+    try:
+        with urllib.request.urlopen(req, timeout=12) as r:
+            return json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        err_msg = e.read().decode("utf-8", errors="ignore")
+        print(f"[Supabase GET error {e.code}] {err_msg}")
+        raise RuntimeError(f"Supabase GET ({e.code}): {err_msg}")
+    except Exception as e:
+        print(f"[Supabase GET error] {e}")
+        raise
 
 def _sb_post(path, data: dict):
-    import urllib.request
+    import urllib.request, urllib.error
     url  = f"{SUPABASE_URL}/rest/v1/{path}"
-    body = json.dumps(data).encode()
+    body = json.dumps(data).encode("utf-8")
     req  = urllib.request.Request(url, data=body, headers={
         "apikey":        SUPABASE_KEY,
         "Authorization": f"Bearer {SUPABASE_KEY}",
         "Content-Type":  "application/json",
         "Prefer":        "return=minimal",
     }, method="POST")
-    with urllib.request.urlopen(req) as r:
-        return r.status
+    try:
+        with urllib.request.urlopen(req, timeout=12) as r:
+            return r.status
+    except urllib.error.HTTPError as e:
+        err_msg = e.read().decode("utf-8", errors="ignore")
+        print(f"[Supabase POST error {e.code}] {err_msg}")
+        raise RuntimeError(f"Database error ({e.code}): {err_msg}")
+    except Exception as e:
+        print(f"[Supabase POST error] {e}")
+        raise
 
 def _sb_upload(filename, file_bytes, mime):
     """Upload file to Supabase Storage via REST."""
@@ -74,7 +98,7 @@ def _sb_upload(filename, file_bytes, mime):
         "x-upsert":      "true",
     }, method="POST")
     try:
-        with urllib.request.urlopen(req) as r:
+        with urllib.request.urlopen(req, timeout=15) as r:
             pass
         return f"{SUPABASE_URL}/storage/v1/object/public/screenshots/{filename}"
     except Exception as e:
@@ -217,12 +241,22 @@ def form():
         now            = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         screenshot_ref = ""
 
-        if is_online and screenshot and screenshot.filename:
-            fname          = f"{reg_no}_{secure_filename(screenshot.filename)}"
-            screenshot_ref = upload_screenshot(screenshot, fname)
+        try:
+            if is_online and screenshot and screenshot.filename:
+                fname          = f"{reg_no}_{secure_filename(screenshot.filename)}"
+                screenshot_ref = upload_screenshot(screenshot, fname)
 
-        db_insert(sr_no, reg_no, name, mobile, city, payment,
-                  ", ".join(pay_methods), transaction_id, screenshot_ref, now)
+            db_insert(sr_no, reg_no, name, mobile, city, payment,
+                      ", ".join(pay_methods), transaction_id, screenshot_ref, now)
+        except Exception as e:
+            app.logger.error(f"Form submission error: {e}")
+            return render_template("form.html", errors=[
+                f"Error saving registration: {e}"
+            ], form_data={
+                "name": name, "mobile": mobile, "city": city,
+                "payment": payment, "pay_method": pay_methods,
+                "transaction_id": transaction_id,
+            })
 
         return redirect(url_for("success", reg=reg_no, name=name))
 
